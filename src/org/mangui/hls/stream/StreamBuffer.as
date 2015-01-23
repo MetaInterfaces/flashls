@@ -2,22 +2,22 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 package org.mangui.hls.stream {
-    import flash.events.TimerEvent;
     import flash.events.Event;
-    import flash.utils.Timer;
+    import flash.events.TimerEvent;
     import flash.utils.Dictionary;
-
-    import org.mangui.hls.event.HLSMediatime;
-    import org.mangui.hls.event.HLSEvent;
-    import org.mangui.hls.constant.HLSSeekStates;
-    import org.mangui.hls.constant.HLSSeekMode;
-    import org.mangui.hls.constant.HLSTypes;
-    import org.mangui.hls.flv.FLVTag;
+    import flash.utils.Timer;
+    
     import org.mangui.hls.HLS;
     import org.mangui.hls.HLSSettings;
-    import org.mangui.hls.loader.FragmentLoader;
+    import org.mangui.hls.constant.HLSSeekMode;
+    import org.mangui.hls.constant.HLSSeekStates;
+    import org.mangui.hls.constant.HLSTypes;
     import org.mangui.hls.controller.AudioTrackController;
     import org.mangui.hls.controller.LevelController;
+    import org.mangui.hls.event.HLSEvent;
+    import org.mangui.hls.event.HLSMediatime;
+    import org.mangui.hls.flv.FLVTag;
+    import org.mangui.hls.loader.FragmentLoader;
 
     CONFIG::LOGGING {
         import org.mangui.hls.utils.Log;
@@ -417,7 +417,7 @@ package org.mangui.hls.stream {
             var _disHeader : FLVData;
             var headercounter : uint = 0;
             var _newheaderTags : Vector.<FLVData> = new Vector.<FLVData>();
-            for (var i : int in _headerTags) {
+            for (var i : String in _headerTags) {
                 var data : FLVData = _headerTags[i];
                 if ((data.position - (_time_sliding - data.sliding)) < clipping_position) {
                     switch(data.tag.type) {

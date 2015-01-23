@@ -49,6 +49,11 @@
             _hls.addEventListener(HLSEvent.ERROR, _errorHandler);
         }
 
+		public function get hls():HLS
+		{
+			return _hls;
+		}
+
         protected function createVideo() : Video {
             return new Video();
         }
