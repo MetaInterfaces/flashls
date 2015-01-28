@@ -10,11 +10,13 @@
     import org.mangui.osmf.plugins.loader.HLSNetLoader;
     import org.mangui.osmf.plugins.traits.*;
     import org.mangui.osmf.plugins.utils.ErrorManager;
-    
+    import org.osmf.events.MediaError;
+    import org.osmf.events.MediaErrorEvent;
     import org.osmf.media.LoadableElementBase;
     import org.osmf.media.MediaElement;
     import org.osmf.media.MediaResourceBase;
     import org.osmf.media.videoClasses.VideoSurface;
+    import org.osmf.net.DynamicStreamingResource;
     import org.osmf.net.NetStreamAudioTrait;
     import org.osmf.net.StreamType;
     import org.osmf.net.StreamingURLResource;
@@ -28,8 +30,6 @@
     import org.osmf.traits.SeekTrait;
     import org.osmf.traits.TimeTrait;
     import org.osmf.utils.OSMFSettings;
-    import org.osmf.events.MediaError;
-    import org.osmf.events.MediaErrorEvent;
     
     CONFIG::LOGGING {
     import org.mangui.hls.utils.Log;
@@ -44,7 +44,7 @@
 
         public function HLSMediaElement(resource : MediaResourceBase, hls : HLS, duration : Number) {
             _hls = hls;
-            _defaultduration = duration;
+            _defaultduration = getDuration(duration, resource)
             super(resource, new HLSNetLoader(hls));
             _hls.addEventListener(HLSEvent.ERROR, _errorHandler);
         }
@@ -117,7 +117,25 @@
                 videoSurface.smoothing = value;
             }
         }
-
+		
+		protected function getDuration(duration: Number, resource: MediaResourceBase) : Number {
+			if(resource is DynamicStreamingResource) {
+				var streamResource: DynamicStreamingResource = DynamicStreamingResource(resource);
+				
+				if(streamResource.clipStartTime) {
+					
+					if(streamResource.clipEndTime) {
+						return (streamResource.clipEndTime - streamResource.clipStartTime); 					
+					}
+					else {
+						return (duration - streamResource.clipStartTime);
+					}
+				}
+			}
+			
+			return duration;
+		}
+		
         private function initTraits() : void {
             _stream = _hls.stream;
 
