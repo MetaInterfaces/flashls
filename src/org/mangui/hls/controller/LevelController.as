@@ -70,6 +70,9 @@ package org.mangui.hls.controller {
             for (i = 0; i < _nbLevel; i++) {
                 _bitrate[i] = levels[i].bitrate;
             }
+			
+			_bitrate = _bitrate.reverse();
+			Log.debug("BitRate: " + _bitrate);
 
             for (i = 0; i < _nbLevel - 1; i++) {
                 _switchup[i] = (_bitrate[i + 1] - _bitrate[i]) / _bitrate[i];
@@ -88,7 +91,7 @@ package org.mangui.hls.controller {
                 minswitchdwown = Math.min(minswitchdwown, _switchdown[i]);
             }
             for (i = 1; i < _nbLevel; i++) {
-                _switchdown[i] = Math.max(2 * minswitchdwown, _switchdown[i]);
+                _switchdown[i] = Math.max(1 * minswitchdwown, _switchdown[i]);
 
                 CONFIG::LOGGING {
                     Log.debug("_switchdown[" + i + "]=" + _switchdown[i]);
@@ -212,7 +215,9 @@ package org.mangui.hls.controller {
              */
             if ((current_level < max_level) && (sftm > (1 + _switchup[current_level]))) {
                 CONFIG::LOGGING {
-                    Log.debug("sftm:> 1+_switchup[_level]=" + (1 + _switchup[current_level]));
+                    Log.debug("Switching UP bitrate frame");
+					Log.debug("sftm = " + sftm);
+					Log.debug("sftm:> 1+_switchup[_level]=" + (1 + _switchup[current_level]));
                 }
                 switch_to_level = current_level + 1;
             }
@@ -222,7 +227,9 @@ package org.mangui.hls.controller {
             or the current level is greater than max level
              */ else if ((current_level > max_level && current_level > 0) || (current_level > 0 && (sftm < 1 - _switchdown[current_level]))) {
                 CONFIG::LOGGING {
-                    Log.debug("sftm < 1-_switchdown[current_level]=" + _switchdown[current_level]);
+					Log.debug("Switching DOWN bitrate frame");
+					Log.debug("sftm = " + sftm);
+                    Log.debug("sftm < 1-_switchdown[current_level]=" + 1 - _switchdown[current_level]);
                 }
                 var bufferratio : Number = 1000 * buffer / _last_segment_duration;
                 /* find suitable level matching current bandwidth, starting from current level

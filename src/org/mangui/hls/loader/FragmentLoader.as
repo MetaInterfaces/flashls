@@ -171,7 +171,7 @@ package org.mangui.hls.loader {
                             /* in case we are switching levels (waiting for playlist to reload) or seeking , stick to same level */
                         } else if (_switchlevel == true) {
                             level = _hls.level;
-                        } else if (_hls.autolevel && _levels.length > 1 ) {
+                        } else if ( _hls.level > -1 && _levels.length > 1 ) {
                             // select level from heuristics (current level / last fragment duration / buffer length)
                             level = _levelController.getnextlevel(_hls.level, _hls.stream.bufferLength);
                         } else if (_hls.autolevel && _levels.length == 1 ) {

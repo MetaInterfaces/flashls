@@ -149,10 +149,14 @@
             addTrait(MediaTraitType.SEEK, seekTrait);
 
             if (_hls.levels.length > 1) {
+				Log.debug("HLS level above 1, " + _hls.levels.length);
                 // setup dynamic stream trait
                 var dsTrait : HLSDynamicStreamTrait = new HLSDynamicStreamTrait(_hls);
                 addTrait(MediaTraitType.DYNAMIC_STREAM, dsTrait);
             }
+			else {
+				Log.debug("I laugh at your levels");
+			}
 
             // retrieve stream type
             var streamType : String = (resource as StreamingURLResource).streamType;
