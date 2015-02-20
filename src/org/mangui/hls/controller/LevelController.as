@@ -71,7 +71,7 @@ package org.mangui.hls.controller {
                 _bitrate[i] = levels[i].bitrate;
             }
 			
-			_bitrate = _bitrate.reverse();
+//			_bitrate = _bitrate.reverse();
 			Log.debug("BitRate: " + _bitrate);
 
             for (i = 0; i < _nbLevel - 1; i++) {
@@ -91,7 +91,7 @@ package org.mangui.hls.controller {
                 minswitchdwown = Math.min(minswitchdwown, _switchdown[i]);
             }
             for (i = 1; i < _nbLevel; i++) {
-                _switchdown[i] = Math.max(1 * minswitchdwown, _switchdown[i]);
+                _switchdown[i] = Math.max(2 * minswitchdwown, _switchdown[i]);
 
                 CONFIG::LOGGING {
                     Log.debug("_switchdown[" + i + "]=" + _switchdown[i]);
